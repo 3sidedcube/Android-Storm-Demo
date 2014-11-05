@@ -70,10 +70,18 @@ public class MainApplication extends Application
 			})
 			.build();
 
+		boolean developerMode = prefs.getBoolean("developer_mode", false);
+		if (developerMode)
+		{
+			contentSettings.setAuthorizationToken(prefs.getString("developer_token", ""));
+			contentSettings.setContentEnvironment(Environment.TEST);
+		}
+
 		languageSettings = new LanguageSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))
-			.defaultLanguage(Uri.parse("cache://languages/" + prefs.getString(SettingsActivity.PREFS_LOCALE, "").toLowerCase(Locale.US) + ".json"))
-			.fallbackLanguage(Uri.parse("cache://languages/gbr_en.json")).build();
+			.defaultLanguage(prefs.contains(SettingsActivity.PREFS_LOCALE) ? Uri.parse("cache://languages/" + prefs.getString(SettingsActivity.PREFS_LOCALE, "").toLowerCase(Locale.US) + ".json") : (Uri.parse("cache://languages/gbr_en.json")))
+			.fallbackLanguage(Uri.parse("cache://languages/gbr_en.json"))
+			.build();
 
 		uiSettings = new UiSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))

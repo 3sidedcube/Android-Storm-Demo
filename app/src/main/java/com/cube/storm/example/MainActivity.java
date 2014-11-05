@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.cube.storm.LanguageSettings;
 import com.cube.storm.ui.activity.StormActivity;
 
 /**
@@ -18,8 +17,6 @@ public class MainActivity extends StormActivity
 	@Override public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.main, menu);
-		menu.getItem(0).setTitle(LanguageSettings.getInstance().getLanguageManager().getValue(this, "_TITLE_SETTINGS"));
-
 		return super.onCreateOptionsMenu(menu);
 	}
 

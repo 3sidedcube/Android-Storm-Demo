@@ -1,6 +1,6 @@
 <resources>
-	<!--<style name="Test" parent="Theme.AppCompat.Light.DarkActionBar">-->
-		<!--&lt;!&ndash;<item name="android:colorPrimary">#ffabcdef</item>&ndash;&gt;-->
-		<!--&lt;!&ndash;<item name="colorPrimary">#ffabcdef</item>&ndash;&gt;-->
-	<!--</style>-->
+	<style name="Test" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!--<item name="android:colorPrimary">#ffabcdef</item>-->
+		<!--<item name="colorPrimary">#ffabcdef</item>-->
+	</style>
 </resources>
