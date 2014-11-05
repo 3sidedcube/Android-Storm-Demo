@@ -9,4 +9,13 @@
 			android:summary="Automatic"
 		/>
 	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="Developer"
+	>
+		<Preference
+			android:key="dev_mode"
+			android:title="Enter developer mode"
+		/>
+	</PreferenceCategory>
 </PreferenceScreen>

@@ -32,7 +32,7 @@ public class BootActivity extends Activity
 		}
 
 		Debug.out("CHECKING FOR UPDATES");
-//		ContentSettings.getInstance().getUpdateManager().checkForUpdates(lastUpdate);
+		ContentSettings.getInstance().getUpdateManager().checkForUpdates(lastUpdate);
 
 		Intent start = UiSettings.getInstance().getIntentFactory().geIntentForPageUri(this, Uri.parse(UiSettings.getInstance().getApp().getVector()));
 
