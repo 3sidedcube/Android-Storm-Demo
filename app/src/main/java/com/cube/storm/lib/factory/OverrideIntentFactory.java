@@ -3,15 +3,19 @@ package com.cube.storm.lib.factory;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.cube.storm.UiSettings;
+import com.cube.storm.example.MainActivity;
 import com.cube.storm.example.fragment.OverrideFragment;
 import com.cube.storm.ui.activity.StormActivity;
 import com.cube.storm.ui.data.FragmentIntent;
 import com.cube.storm.ui.lib.factory.IntentFactory;
+import com.cube.storm.ui.model.Model;
 import com.cube.storm.ui.model.descriptor.PageDescriptor;
-
-import lombok.NonNull;
+import com.cube.storm.ui.model.page.Page;
+import com.cube.storm.ui.model.page.PageCollection;
 
 /**
  * Example intent factory for overriding fragment
@@ -45,6 +49,18 @@ public class OverrideIntentFactory extends IntentFactory
 
 	@Nullable @Override public Intent getIntentForPageDescriptor(@NonNull Context context, @NonNull PageDescriptor pageDescriptor)
 	{
-		return super.getIntentForPageDescriptor(context, pageDescriptor);
+		Intent ret = super.getIntentForPageDescriptor(context, pageDescriptor);
+
+		Class<? extends Model> pageType = UiSettings.getInstance().getViewFactory().getModelForView(pageDescriptor.getType());
+
+		if (Page.class.isAssignableFrom(pageType)
+		|| PageCollection.class.isAssignableFrom(pageType))
+		{
+			Bundle extras = ret.getExtras();
+			ret = new Intent(context, MainActivity.class);
+			ret.putExtras(extras);
+		}
+
+		return ret;
 	}
 }
