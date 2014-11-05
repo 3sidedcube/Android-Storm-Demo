@@ -2,13 +2,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.cube.storm.example"
 >
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-
-	<!-- Push notifications -->
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
 	<application
 		android:allowBackup="true"
@@ -22,19 +16,11 @@
 				<action android:name="android.intent.action.MAIN" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".MainActivity" />
+		<activity android:name=".SettingsActivity" />
 
-		<activity android:name="com.cube.storm.ui.activity.StormActivity" android:theme="@style/Test" />
-		<activity android:name="com.cube.storm.ui.activity.VideoPlayerActivity" android:theme="@style/Test" />
-
-		<!-- Push Notifications -->
-		<receiver
-			android:name="com.cube.storm.message.lib.receiver.GCMReceiver"
-			android:permission="com.google.android.c2dm.permission.SEND"
-		>
-			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-				<category android:name="com.cube.storm.example" />
-			</intent-filter>
-		</receiver>
+		<activity android:name="com.cube.storm.ui.activity.StormActivity" />
+		<activity android:name="com.cube.storm.ui.activity.VideoPlayerActivity" />
+		<activity android:name="com.cube.storm.ui.activity.WebViewActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
 	</application>
 </manifest>
