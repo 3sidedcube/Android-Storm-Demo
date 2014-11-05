@@ -7,6 +7,17 @@
 			android:key="locale"
 			android:title="Change your apps language"
 			android:summary="Automatic"
+			android:enabled="true"
+		/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="Developer"
+	>
+		<Preference
+			android:key="developer_mode"
+			android:title="Enter developer mode"
+			android:enabled="true"
 		/>
 	</PreferenceCategory>
 </PreferenceScreen>

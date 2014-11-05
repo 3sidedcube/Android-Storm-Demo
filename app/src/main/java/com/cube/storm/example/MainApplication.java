@@ -28,6 +28,8 @@ import net.callumtaylor.asynchttp.obj.entity.JsonEntity;
 
 import java.util.Locale;
 
+import lombok.Getter;
+
 /**
  * Entry application for the example.
  *
@@ -38,10 +40,10 @@ import java.util.Locale;
  */
 public class MainApplication extends Application
 {
-	private static ContentSettings contentSettings;
-	private static UiSettings uiSettings;
-	private static LanguageSettings languageSettings;
-	private static MessageSettings messageSettings;
+	@Getter private static ContentSettings contentSettings;
+	@Getter private static UiSettings uiSettings;
+	@Getter private static LanguageSettings languageSettings;
+	@Getter private static MessageSettings messageSettings;
 	private SharedPreferences prefs;
 
 	@Override public void onCreate()
@@ -52,10 +54,10 @@ public class MainApplication extends Application
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		contentSettings = new ContentSettings.Builder(this)
-			.appId("3SC_STORM-1-1")
+			.appId("STORM_CORP-1-1")
 			.contentBaseUrl("http://api.stormcorp.co/")
-			.contentVersion("latest")
-			.contentEnvironment(Environment.TEST)
+			.contentVersion("v1.0")
+			.contentEnvironment(Environment.LIVE)
 			.updateListener(new UpdateListener()
 			{
 				@Override public void onUpdateDownloaded()
@@ -68,10 +70,18 @@ public class MainApplication extends Application
 			})
 			.build();
 
+		boolean developerMode = prefs.getBoolean("developer_mode", false);
+		if (developerMode)
+		{
+			contentSettings.setAuthorizationToken(prefs.getString("developer_token", ""));
+			contentSettings.setContentEnvironment(Environment.TEST);
+		}
+
 		languageSettings = new LanguageSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))
-			.defaultLanguage(Uri.parse("cache://languages/" + prefs.getString(SettingsActivity.PREFS_LOCALE, "").toLowerCase(Locale.US) + ".json"))
-			.fallbackLanguage(Uri.parse("cache://languages/gbr_en.json")).build();
+			.defaultLanguage(prefs.contains(SettingsActivity.PREFS_LOCALE) ? Uri.parse("cache://languages/" + prefs.getString(SettingsActivity.PREFS_LOCALE, "").toLowerCase(Locale.US) + ".json") : (Uri.parse("cache://languages/gbr_en.json")))
+			.fallbackLanguage(Uri.parse("cache://languages/gbr_en.json"))
+			.build();
 
 		uiSettings = new UiSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))
