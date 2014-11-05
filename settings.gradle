@@ -1,0 +1,10 @@
+include ':app'
+
+include ':Libraries:LightningUtil'
+include ':Libraries:LightningUi'
+include ':Libraries:LightningUi:Libraries:ExoPlayer:library'
+include ':Libraries:LightningContent'
+include ':Libraries:LightningLanguage'
+include ':Libraries:LightningMessage'
+
+include ':Libraries:LightningUiBuilder'
