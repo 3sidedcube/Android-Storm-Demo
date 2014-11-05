@@ -1,7 +1,8 @@
 package com.cube.storm.example.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
+
+import com.cube.storm.ui.fragment.StormListFragment;
 
 /**
  * Overrides a storm fragment, page id 56
@@ -9,7 +10,7 @@ import android.os.Bundle;
  * @author Callum Taylor
  * @project StormExample
  */
-public class OverrideFragment extends Fragment
+public class OverrideFragment extends StormListFragment
 {
 	@Override public void onActivityCreated(Bundle savedInstanceState)
 	{

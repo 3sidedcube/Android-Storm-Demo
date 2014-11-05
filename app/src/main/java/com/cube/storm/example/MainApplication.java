@@ -2,7 +2,9 @@ package com.cube.storm.example;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -24,6 +26,8 @@ import com.google.gson.JsonObject;
 import net.callumtaylor.asynchttp.AsyncHttpClient;
 import net.callumtaylor.asynchttp.obj.entity.JsonEntity;
 
+import java.util.Locale;
+
 /**
  * Entry application for the example.
  *
@@ -38,12 +42,14 @@ public class MainApplication extends Application
 	private static UiSettings uiSettings;
 	private static LanguageSettings languageSettings;
 	private static MessageSettings messageSettings;
+	private SharedPreferences prefs;
 
 	@Override public void onCreate()
 	{
 		super.onCreate();
 
 		Debug.DEBUG = true;
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		contentSettings = new ContentSettings.Builder(this)
 			.appId("3SC_STORM-1-1")
@@ -64,8 +70,8 @@ public class MainApplication extends Application
 
 		languageSettings = new LanguageSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))
-			.defaultLanguage(Uri.parse("cache://languages/gbr_en.json"))
-			.build();
+			.defaultLanguage(Uri.parse("cache://languages/" + prefs.getString(SettingsActivity.PREFS_LOCALE, "").toLowerCase(Locale.US) + ".json"))
+			.fallbackLanguage(Uri.parse("cache://languages/gbr_en.json")).build();
 
 		uiSettings = new UiSettings.Builder(this)
 			.registerUriResolver("cache", ContentSettings.getInstance().getUriResolvers().get("cache"))
