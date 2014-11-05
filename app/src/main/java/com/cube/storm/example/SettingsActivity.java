@@ -12,7 +12,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import com.cube.storm.ContentSettings;
-import com.cube.storm.LanguageSettings;
 import com.cube.storm.content.model.Manifest;
 import com.cube.storm.content.model.Manifest.FileDescriptor;
 
@@ -39,9 +38,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 	{
 		super.onCreate(savedInstanceState);
 
-		setTitle(LanguageSettings.getInstance().getLanguageManager().getValue(this, "_TITLE_SETTINGS"));
 		addPreferencesFromResource(R.xml.preferences);
-
 		findPreference("locale").setOnPreferenceClickListener(this);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -53,69 +50,72 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 		{
 			Manifest manifest = ContentSettings.getInstance().getBundleBuilder().buildManifest(Uri.parse("cache://" + FILE_MANIFEST));
 
-			final ArrayList<Locale> locales = new ArrayList<Locale>(manifest.getLanguages().size());
-			final ArrayList<String> options = new ArrayList<String>(manifest.getLanguages().size() + 1);
-			options.add("Automatic");
-
-			String currentLocale = prefs.getString(PREFS_LOCALE, "");
-			int selectedLocale = 0;
-
-			int index = 0;
-			for (FileDescriptor language : manifest.getLanguages())
+			if (manifest != null)
 			{
-				String languageSrc = language.getSrc();
-				String[] languageSpec = languageSrc.replace(".json", "").split("_");
-				Locale locale = new Locale(languageSpec[1], languageSpec[0]);
+				final ArrayList<Locale> locales = new ArrayList<Locale>(manifest.getLanguages().size());
+				final ArrayList<String> options = new ArrayList<String>(manifest.getLanguages().size() + 1);
+				options.add("Automatic");
 
-				locales.add(locale);
-				options.add(locale.getDisplayCountry(locale) + " - " + locale.getDisplayLanguage(locale));
+				String currentLocale = prefs.getString(PREFS_LOCALE, "");
+				int selectedLocale = 0;
 
-				if (currentLocale.equals(locale.getISO3Country() + "_" + locale.getLanguage()))
+				int index = 0;
+				for (FileDescriptor language : manifest.getLanguages())
 				{
-					selectedLocale = index + 1;
+					String languageSrc = language.getSrc();
+					String[] languageSpec = languageSrc.replace(".json", "").split("_");
+					Locale locale = new Locale(languageSpec[1], languageSpec[0]);
+
+					locales.add(locale);
+					options.add(locale.getDisplayCountry(locale) + " - " + locale.getDisplayLanguage(locale));
+
+					if (currentLocale.equals(locale.getISO3Country() + "_" + locale.getLanguage()))
+					{
+						selectedLocale = index + 1;
+					}
+
+					index++;
 				}
 
-				index++;
+				new AlertDialog.Builder(this)
+					.setTitle("Select")
+					.setSingleChoiceItems(options.toArray(new String[options.size()]), selectedLocale, new DialogInterface.OnClickListener()
+					{
+						@Override public void onClick(DialogInterface dialog, int which)
+						{
+							selectedLocaleOption = which;
+						}
+					})
+					.setPositiveButton("Change", new DialogInterface.OnClickListener()
+					{
+						@Override public void onClick(DialogInterface dialog, int which)
+						{
+							SharedPreferences.Editor editor = prefs.edit();
+
+							if (selectedLocaleOption - 1 < 0)
+							{
+								editor.remove(PREFS_LOCALE);
+								editor.remove(PREFS_LOCALE_STRING);
+							}
+							else
+							{
+								editor.putString(PREFS_LOCALE, locales.get(selectedLocaleOption - 1).getISO3Country() + "_" + locales.get(selectedLocaleOption - 1).getLanguage());
+								editor.putString(PREFS_LOCALE_STRING, options.get(selectedLocaleOption));
+							}
+
+							editor.putBoolean("language_card", true);
+							editor.apply();
+
+							finish();
+
+							Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							startActivity(intent);
+						}
+					})
+					.setNegativeButton("Close", null)
+					.show();
 			}
-
-			new AlertDialog.Builder(this)
-				.setTitle("Select")
-				.setSingleChoiceItems(options.toArray(new String[options.size()]), selectedLocale, new DialogInterface.OnClickListener()
-				{
-					@Override public void onClick(DialogInterface dialog, int which)
-					{
-						selectedLocaleOption = which;
-					}
-				})
-				.setPositiveButton("Change", new DialogInterface.OnClickListener()
-				{
-					@Override public void onClick(DialogInterface dialog, int which)
-					{
-						SharedPreferences.Editor editor = prefs.edit();
-
-						if (selectedLocaleOption - 1 < 0)
-						{
-							editor.remove(PREFS_LOCALE);
-							editor.remove(PREFS_LOCALE_STRING);
-						}
-						else
-						{
-							editor.putString(PREFS_LOCALE, locales.get(selectedLocaleOption - 1).getISO3Country() + "_" + locales.get(selectedLocaleOption - 1).getLanguage());
-							editor.putString(PREFS_LOCALE_STRING, options.get(selectedLocaleOption));
-						}
-
-						editor.putBoolean("language_card", true);
-						editor.apply();
-
-						finish();
-
-						Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(intent);
-					}
-				})
-				.setNegativeButton("Close", null)
-			.show();
 		}
 
 		return false;
