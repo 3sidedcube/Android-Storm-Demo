@@ -53,12 +53,14 @@ public class OverrideIntentFactory extends IntentFactory
 
 		Class<? extends Model> pageType = UiSettings.getInstance().getViewFactory().getModelForView(pageDescriptor.getType());
 
-		if (Page.class.isAssignableFrom(pageType)
-		|| PageCollection.class.isAssignableFrom(pageType))
+		if (pageType != null)
 		{
-			Bundle extras = ret.getExtras();
-			ret = new Intent(context, MainActivity.class);
-			ret.putExtras(extras);
+			if (Page.class.isAssignableFrom(pageType) || PageCollection.class.isAssignableFrom(pageType))
+			{
+				Bundle extras = ret.getExtras();
+				ret = new Intent(context, MainActivity.class);
+				ret.putExtras(extras);
+			}
 		}
 
 		return ret;

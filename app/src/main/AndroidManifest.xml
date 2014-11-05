@@ -15,7 +15,7 @@
 		android:label="@string/app_name"
 		android:name=".MainApplication"
 	>
-		<activity android:name=".BootActivity">
+		<activity android:name=".BootActivity" android:launchMode="singleTop">
 			<intent-filter>
 				<category android:name="android.intent.category.LAUNCHER" />
 				<action android:name="android.intent.action.MAIN" />
