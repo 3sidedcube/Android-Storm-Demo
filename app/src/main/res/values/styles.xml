@@ -1,0 +1,6 @@
+<resources>
+	<style name="Test" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!--<item name="android:colorPrimary">#ffabcdef</item>-->
+		<!--<item name="colorPrimary">#ffabcdef</item>-->
+	</style>
+</resources>

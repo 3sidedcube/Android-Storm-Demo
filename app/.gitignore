@@ -85,4 +85,3 @@ build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
-app/src/main/assets
